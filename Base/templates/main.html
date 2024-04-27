@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TODO LIST</title>
+    <link rel="stylesheet" href="{% static 'styles/home.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/Todo.css' %}">
+    <style>
+      body {
+    width: 100%;
+    min-height: 100vh;
+    background-image: url("/static/styles/bg.jpeg");
+    /* background-color: purple; */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 10px;    
+}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <nav>
+        <div class="logo">Todo List App</div>
+        <div id="log">
+          <span>WELCOME &nbsp;   
+          {% if user_name %}
+          {{user_name}}</span>
+          {% else %}
+          <a href="{% url 'login' %}" class="login">Login/Signin</a>
+          {% endif %}
+        </div>
+      </nav>
+      <div class="home">{% block content %} {% endblock %}</div>
+    </div>
+  </body>
+</html>

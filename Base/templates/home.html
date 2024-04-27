@@ -1,0 +1,59 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+{% if user_name %}
+<div class="headings">
+  <h1 class="messagelist"><span>{{ user_name }}</span>'S TODO LISTS</h1>
+  <div class="BigButton">
+    <a class="createButtonS" href="{% url 'createTask' %}"
+      ><span>CREATE TASKS</span></a>
+  </div>
+  <br><br>
+      <div class="create">
+        {% for item in List %}
+        <div class="box">
+          <br />
+          <br />
+          <h3>
+            TASK: &nbsp;{{item.list_name}} <br />DATE:<span
+              >{{item.created_date}}</span
+            >
+          </h3>
+          <br />
+          <a href="{% url 'Lists' item.id %}"
+            ><button class="view">view list</button></a
+          >
+        </div>
+        {% endfor %}
+      </div>
+  </div>
+{% else %}
+<style>
+  
+.beforeLogin{
+  position: relative;
+  left: 0%;
+  right:100%;
+  color: #fff;
+  display: grid; 
+    justify-content: center; 
+    align-items: center;
+}
+.loginb{
+    width: auto;
+    position: relative;
+    text-decoration: none;
+    font-size: 30px;
+    color: #fff;
+    top: 10px;
+    padding: 5px 10vh;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    text-align: center;
+}
+
+</style>
+<div class="headings">
+<div class="beforeLogin">
+  <h1>LOGIN/REGISTER TO CONTINUE</h1>
+  <a href="{% url 'login' %}" class="loginb">Login/Signin</a>
+</div></div>
+{% endif %} {% endblock content %}

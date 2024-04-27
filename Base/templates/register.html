@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'styles/login.css' %}">
+</head>
+<body>
+    <style>
+          body {
+    width: 100%;
+    min-height: 100vh;
+    background-image: url("/static/styles/bg.jpeg");
+    /* background-color: purple; */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 10px;    
+}
+.messages{
+      color: crimson;
+      position: relative;
+}
+/* Style for form labels */
+label {
+    display: block; 
+    margin-bottom: 5px; 
+}
+
+/* Style for form inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%; /* Make inputs expand to fill the width of their container */
+    padding: 8px; /* Add padding to the inputs for better spacing */
+    margin-bottom: 10px; /* Add spacing below each input */
+    border: 1px solid #ccc; /* Add a border to the inputs */
+    border-radius: 4px; /* Add border radius for rounded corners */
+}
+
+/* Style for password input validation messages */
+input[type="password"]:invalid + span.error {
+    color: red; /* Set color for error message */
+}
+
+/* Style for password strength requirements */
+form div{
+    font-size: 12px; /* Set font size for password requirements */
+    color: #666; /* Set color for password requirements */
+    margin-top: 5px; /* Add spacing above password requirements */
+}
+input{
+    font-size: 12px; /* Set font size for password requirements */
+    color: #080505; /* Set color for password requirements */
+    margin-top: 5px;
+}
+.loginb{
+    position: relative;
+    text-align: center;
+    width: 100%;    
+}
+
+    </style>
+        <!-- register.html -->
+        <div class="container">
+            <div class="home">
+        <div class="login-container">
+    <h2>Register</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button type="submit">Register</button>
+    </form>
+    <a href="{% url 'login' %}" class="loginb">Login/Signin</a>
+
+</div>
+</div></div>
+</body>
+</html>

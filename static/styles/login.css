@@ -1,0 +1,42 @@
+
+.login-container {
+    background-color: #ffffff;
+    display: flex;
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: blue;
+}
+
+button{
+    width: 40%;
+}
+
+input[type="text"],
+input[type="password"],
+button {
+    display: block;
+    width: 97%; 
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: tomato;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5vmin;
+    position: relative;
+    left: 10px;
+}
+
+button:hover {
+    background-color: rgb(122, 48, 35);
+}

@@ -1,0 +1,226 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<style>
+  ul li::before{
+    content: '';
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    border-radius: 50px;
+    background-image: url("{% static 'images/unchecked.png' %}");
+    background-size: cover;
+    background-position: center;
+    top: 7px;
+    left: 8px;
+}
+
+ul li.checked::before{
+    background-image: url("{% static 'images/checked.png' %}");
+    }
+
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="todo-app">
+  <h2><span id="name">{{room}}</span> <img src="" height="100px" /></h2>
+  <div class="row">
+    <input type="text " id="input-box" placeholder="Add your text" />
+    <button onclick="addTask()">Add</button>
+  </div>
+  <h4>Pending tasks</h4>
+  <p id="pending"><i>*pending task will appear here</i></p>
+  <ul id="list-pending-container"></ul>
+  <br /><br />
+  <h4>Completed tasks</h4>
+  <p id="complete"><i>*completed tasks will appear here</i></p>
+  <ul id="list-completed-container"></ul>
+  <br /><br />
+  <div class="buttons">
+    <button class="edit" onclick="updateTasks()">UPDATE</button>
+    <button class="edit" onclick="deleteItem()">DELETE</button>
+  </div>
+</div>
+<style>
+    #AfterData{display: none;}
+</style>
+<script>
+  const inputBox= document.getElementById("input-box");
+  const listContainer=document.getElementById("list-pending-container");
+  const listContainerComp=document.getElementById("list-completed-container");
+  const pendingPara=document.querySelector("#pending");
+  const completePara=document.querySelector("#complete");
+  const h1=document.querySelector("h2");
+  let count=0;
+  let compcount=0;
+  let dis=document.createElement("span");
+  let tasks = [];
+  dis.innerHTML= `${compcount}/${compcount+count} completed`;
+  h1.appendChild(dis);
+  dis.setAttribute("id","count");
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var data = [
+    '{% for item in data %}'
+        ,{
+            id: "{{ item.id }}",
+            user_id: "{{ item.user_id }}",
+            list_id: "{{ item.list_id }}",
+            item: "{{ item.item }}",
+            status: "{{ item.status|yesno:'true,false' }}"
+        },
+    '{% endfor %}'
+  ];
+  for (let items of data) 
+{
+  if (items === "") {
+    continue;
+  }
+  else{
+    if(items.list_id === `{{pk}}` ){
+    if (items.status === "true") {
+        compcount++;
+        let li = document.createElement("li");
+        li.textContent = items.item;
+        listContainerComp.appendChild(li);
+        completePara.setAttribute("id", "AfterData");
+        let span = document.createElement("span");
+        span.innerHTML = "\u00d7";
+        li.appendChild(span);
+        tasks.push({ user_id: "{{user_id}}", list_id: "{{pk}}", item: items.item, status: true });
+    } 
+    else {
+        count++;
+        let li = document.createElement("li");
+        li.textContent = items.item;
+        listContainer.appendChild(li);
+        pendingPara.setAttribute("id", "AfterData");
+        let span = document.createElement("span");
+        span.innerHTML = "\u00d7";
+        li.appendChild(span);
+        tasks.push({ user_id: "{{user_id}}", list_id: "{{pk}}", item: items.item, status: false });
+    }}
+  }
+}
+dis.innerHTML = `${compcount}/${compcount + count} completed`;
+h1.appendChild(dis);
+console.log(data);
+});
+
+
+function addTask(){
+    if(inputBox.value === ''){
+          alert("You must write something");
+    }
+    else{
+          count++;
+          let li=document.createElement("li");
+          li.textContent= inputBox.value;
+          listContainer.appendChild(li);
+          pendingPara.setAttribute("id","AfterData"); 
+          let span=document.createElement("span");
+          span.innerHTML = "\u00d7";
+          li.appendChild(span);
+          tasks.push({user_id:"{{user_id}}", list_id:"{{pk}}", item: inputBox.value, status: false });
+          dis.innerHTML= `${compcount}/${compcount+count} completed`;
+          h1.appendChild(dis);
+    }
+    inputBox.value="";
+};
+  
+listContainer.addEventListener("click", function(e) {
+    if (e.target.tagName === "LI") {
+      let temp = e.target.firstChild.textContent.trim();
+        e.target.classList.toggle("checked");
+        listContainerComp.appendChild(e.target);
+        completePara.setAttribute("id", "AfterData");
+        compcount++;
+        for (let i of tasks) {
+            if (i["item"] === temp) {
+                i["status"] = true;
+                break;
+            }
+        }
+    } else if (e.target.tagName === "SPAN") {
+      let liElement = e.target.closest("li");
+        // Get the text node within the <li> element
+        let textNode = liElement.childNodes[0];
+        // Extract text content of the text node
+        let liContent = textNode.textContent.trim();
+      
+        tasks = tasks.filter(task => task["item"] !== liContent);
+        e.target.parentElement.remove();
+      }
+    count--;
+    if (count === 0) {
+        pendingPara.setAttribute("id", "pending");
+    }
+    dis.innerHTML = `${compcount}/${compcount + count} completed`;
+    h1.appendChild(dis);
+}, false);
+listContainerComp.addEventListener("click",function(e){
+      if(e.target.tagName === "LI"){
+          let temp = e.target.firstChild.textContent.trim();
+          e.target.classList.toggle("checked");
+          listContainer.appendChild(e.target);
+          for (let i of tasks) {
+            if (i["item"] === temp) {
+                i["status"] = false;
+                break;
+            }
+        }
+          pendingPara.setAttribute("id","AfterData"); 
+          count++;
+      }
+      else if(e.target.tagName === "SPAN"){
+        let liElement = e.target.closest("li");
+        // Get the text node within the <li> element
+        let textNode = liElement.childNodes[0];
+        // Extract text content of the text node
+        let liContent = textNode.textContent.trim();
+        tasks = tasks.filter(task => task["item"] !== liContent);
+        e.target.parentElement.remove();
+      }
+      compcount--;
+      if(compcount === 0){completePara.setAttribute("id","complete");} 
+      dis.innerHTML= `${compcount}/${compcount+count} completed`;
+      h1.appendChild(dis);
+  },false);
+
+function getCookie(name) {
+    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return cookieValue ? cookieValue.pop() : '';
+}
+
+function updateTasks() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', "/update/", true);  
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    const csrftoken = getCookie('csrftoken');
+    xhr.setRequestHeader('X-CSRFToken', csrftoken);
+
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+           
+            alert("Updated")
+
+            // Additional actions after successful update can be added here
+        } else {
+            alert('Error updating tasks: ' + xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        alert('Request failed');
+    };
+    xhr.send(JSON.stringify(tasks)) // Send the array as JSON string in the request body
+    console.log(tasks);
+  }
+
+  function deleteItem(){
+     window.location.href = "{% url 'delete_item_hehe' pk %}";
+  }
+  </script>
+{% endblock content %}

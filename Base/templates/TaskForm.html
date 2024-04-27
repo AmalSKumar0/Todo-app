@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'styles/create.css' %}">
+<div class="Container">
+    <h1>CREATE YOUR LIST</h1>
+    <br><br>
+    <form method="POST" action="">
+    {% csrf_token %}
+    <div class="input">
+     {{form.as_div}}<input class="button" type="submit" value="submit">
+    </div>
+    </form>
+</div>
+{% endblock content %}

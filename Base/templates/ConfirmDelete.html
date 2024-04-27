@@ -1,0 +1,48 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .delete{
+    display: grid; 
+    justify-content: center; 
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    max-height: 400px;
+    background: white;
+    margin: 100px auto 20px;
+    padding:40px 30px 70px;
+    border-radius: 10px;
+}
+h3{
+    text-align: center;
+}
+#delete_button{
+    position: relative;
+    top: 30px;
+    left: 32%;
+    right: 68%;
+    border:none;
+    outline: none;
+    padding: 10px 50px;
+    background: tomato;
+    color:#fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 40px;
+    text-align: center;
+}
+
+#delete_button:hover{
+    background-color: rgb(214, 32, 0);
+}
+</style>
+
+<div class="delete">
+    <b><h3>ARE YOU SURE THAT YOU WANT TO DELETE THIS LIST</h3></b>
+<form action="{% url 'delete_item' item_id %}" method="post">
+    {% csrf_token %}
+    <button id="delete_button" type="submit">Delete Item</button>
+</form>
+</div>
+{% endblock content %}
